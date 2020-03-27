@@ -14,7 +14,23 @@ namespace practice {
     public:
 
         LinkedList() : head{nullptr}, tail{nullptr} {}
-        ~LinkedList() { // traverse list and free every node}
+
+        /* 
+         * Since we have explicitly specified a destructor, the move constructor and move
+         * assignment operator will not be defined. However, default copy operations are
+         * deprecated, and we must explicitly suppress these operations
+         */
+
+        // Suppressing copy construction
+        LinkedList(const LinkedList&) = delete;
+
+        // Suppressing copy assignment
+        LinkedList& operator = (const LinkedList&) = delete;
+
+        // Destructor
+        ~LinkedList() { 
+            // traverse list and free every node
+        }
 
         void PushFront(int);
 
