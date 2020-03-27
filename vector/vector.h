@@ -5,16 +5,18 @@
 #include <algorithm>    
 
 namespace practice {
-
+    
+    template <typename T>
     class Vector {
 
     public:
 
+        using value_type = T;
         //Constructors
-        Vector() {}
-        Vector(int capacity) : ar{new int[capacity]}, capacity{capacity}, size{0} {}
+        Vector() : ar{nullptr}, capacity{0}, size{0} {}
+        Vector(int capacity) : ar{new value_type[capacity]}, capacity{capacity}, size{0} {}
         //allows initializing the vector via a user-defined initializer list
-        Vector(const std::initializer_list<int> &); 
+        
 
         /*
          * Rule of Five: 
@@ -48,19 +50,23 @@ namespace practice {
         int Size();
         int Capacity();
         bool IsEmpty();
-        int At(int index);
-        void Push(int item);
-        void Insert(int item, int index);
-        void Prepend(int item);
-        int Delete(int index);
-        int Pop();
-        void Remove(int item);
-        int Find(int item);
+        value_type At(int index);
+        void Push(value_type item);
+        void Insert(value_type item, int index);
+        void Prepend(value_type item);
+        value_type Delete(int index);
+        value_type Pop();
+        void Remove(value_type item);
+        int Find(value_type item);
         void Print();
+
+        // To support a ranged for loop, we must define begin() and end() functions
+        value_type* begin() {return &ar[0];}
+        value_type* end() {return begin() + size;}
 
     private:    
 
-        int *ar;
+        value_type *ar;
         int capacity;
         int size;
 

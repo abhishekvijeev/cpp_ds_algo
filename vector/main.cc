@@ -4,6 +4,6 @@
 
 int main() {
 
-    practice::Vector v {1,2,3};
+    practice::Vector<int> v;
     return 0;
 }
