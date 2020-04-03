@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <algorithm>    
 #include <memory>
+#include <iostream>
 
 namespace practice {
     
@@ -30,9 +31,27 @@ namespace practice {
          */
 
         // Default and parameterized constructors
-        Vector() : ar{nullptr}, capacity{0}, size{0} {}
-        Vector(int capacity) : ar{new value_type[capacity]}, capacity{capacity}, size{0} {}
-        
+        Vector() : 
+            array{nullptr},
+            capacity{0},
+            size{0} {
+        }
+
+        Vector(unsigned long capacity) : 
+            array{new value_type[capacity]},
+            capacity{capacity},
+            size{0} {
+        }
+
+        Vector(std::initializer_list<value_type> list) : 
+            array{new value_type[list.size()]},
+            capacity{list.size()},
+            size{list.size()} {
+
+            std::copy(list.begin(), list.end(), array);
+            
+        }
+
         //Copy Constructor
         Vector(const Vector&);
 
@@ -45,7 +64,11 @@ namespace practice {
         Vector& operator = (Vector);
 
         //Destructor
-        ~Vector() {}
+        ~Vector() {
+
+            if(array != nullptr) 
+                delete[] array;
+        }
 
         // Operations
 
@@ -55,21 +78,33 @@ namespace practice {
          ***********************
          */
 
-        int Size();
-        int Capacity();
+        unsigned long Size();
+        unsigned long Capacity();
         bool IsEmpty();
         value_type At(int index);   //throw out_of_range exception
-        void Push(value_type item);
+
+        void Push(value_type item) {
+
+            array[size] = item;
+            ++size;
+        }
+
         void Insert(value_type item, int index);
         void Prepend(value_type item);
         value_type Delete(int index);
         value_type Pop();
         void Remove(value_type item);
         int Find(value_type item);
-        void Print();
+
+        void Print() {
+
+            for(unsigned long i = 0; i < size; ++i)
+                std::cout << array[i] << " ";
+            std::cout << std::endl;
+        }
 
         // To support a ranged for loop, we must define begin() and end() functions
-        value_type* begin() {return &ar[0];}
+        value_type* begin() {return &array[0];}
         value_type* end() {return begin() + size;}
 
         // Overload subscript operators
@@ -77,9 +112,9 @@ namespace practice {
 
     private:    
 
-        std::unique_ptr<value_type> ar;
-        int capacity;
-        int size;
+        value_type *array;
+        unsigned long capacity;
+        unsigned long size;
 
         static constexpr int kGrowthFactor = 2;
         static constexpr int kShrinkFactor = 4;

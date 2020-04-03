@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.00)
 
 project(vector)
 
-set(SOURCE_FILES main.cc vector.cc)
+set(SOURCE_FILES main.cc)
 set(INCLUDE_DIRS include)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
