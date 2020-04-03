@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <algorithm>    
+#include <memory>
 
 namespace practice {
     
@@ -47,10 +48,17 @@ namespace practice {
         ~Vector() {}
 
         // Operations
+
+        /*
+         ***********************
+         * THROW EXCEPTIONS!!! 
+         ***********************
+         */
+
         int Size();
         int Capacity();
         bool IsEmpty();
-        value_type At(int index);
+        value_type At(int index);   //throw out_of_range exception
         void Push(value_type item);
         void Insert(value_type item, int index);
         void Prepend(value_type item);
@@ -64,9 +72,12 @@ namespace practice {
         value_type* begin() {return &ar[0];}
         value_type* end() {return begin() + size;}
 
+        // Overload subscript operators
+        value_type& operator[](int i) const {return At(i);}
+
     private:    
 
-        value_type *ar;
+        std::unique_ptr<value_type> ar;
         int capacity;
         int size;
 
