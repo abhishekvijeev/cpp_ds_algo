@@ -12,12 +12,8 @@ namespace practice {
 
     public:
 
+        // Template alias
         using value_type = T;
-        //Constructors
-        Vector() : ar{nullptr}, capacity{0}, size{0} {}
-        Vector(int capacity) : ar{new value_type[capacity]}, capacity{capacity}, size{0} {}
-        //allows initializing the vector via a user-defined initializer list
-        
 
         /*
          * Rule of Five: 
@@ -33,6 +29,10 @@ namespace practice {
          * 
          */
 
+        // Default and parameterized constructors
+        Vector() : ar{nullptr}, capacity{0}, size{0} {}
+        Vector(int capacity) : ar{new value_type[capacity]}, capacity{capacity}, size{0} {}
+        
         //Copy Constructor
         Vector(const Vector&);
 
