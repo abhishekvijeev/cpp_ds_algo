@@ -74,9 +74,9 @@ namespace practice {
 
         unsigned long Size() const { return size; }
 
-        unsigned long Capacity() const {return capacity; }
+        unsigned long Capacity() const { return capacity; }
 
-        bool IsEmpty() const {return size == 0; }
+        bool IsEmpty() const { return size == 0; }
 
         value_type At (int index) const{
 
