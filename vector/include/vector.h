@@ -52,13 +52,13 @@ namespace practice {
             
         }
 
-        //Copy Constructor
+        // TODO: Copy Constructor
         Vector(const Vector&);
 
-        // Move Constructor
+        // TODO: Move Constructor
         Vector(Vector&&); 
 
-        // Assignment Operator
+        // TODO: Assignment Operator
         // - If the argument passed is an lvalue, it is copy constructed
         // - If the argument is an rvalue, it is move constructed
         Vector& operator = (Vector);
@@ -78,7 +78,7 @@ namespace practice {
 
         bool IsEmpty() const { return size == 0; }
 
-        value_type At (int index) const{
+        value_type At (unsigned long index) const{
 
             if(index < 0 || index >= size)
                 throw std::out_of_range("Array index out of bounds!");
@@ -96,7 +96,7 @@ namespace practice {
             ++size;
         }
 
-        void Insert(value_type item, int index) {
+        void Insert(value_type item, unsigned long index) {
 
             if(index < 0 || index > size)
                 throw std::out_of_range("Array index out of bounds!");
@@ -104,7 +104,7 @@ namespace practice {
             if(size == capacity)
                 Expand();
 
-            for(int i = size; i > index; --i)
+            for(unsigned long i = size; i > index; --i)
                 array[i] = array[i - 1];
 
             array[index] = item;
@@ -113,14 +113,14 @@ namespace practice {
 
         void Prepend(value_type item) { Insert(item, 0); }
 
-        value_type Delete(int index) {
+        value_type Delete(unsigned long index) {
 
             if(index < 0 || index >= size)
                 throw std::out_of_range("Array index out of bounds!");
 
-            int data = array[index];
+            value_type data = array[index];
 
-            for(int i = index; i < size; ++i) 
+            for(unsigned long i = index; i < size; ++i) 
                 array[i] = array[i + 1];
             
             --size;
@@ -132,10 +132,10 @@ namespace practice {
 
         value_type Pop() { return Delete(size - 1); }
 
-        // Could be improved to indicate that the element was not found
+        // TODO: Indicate that the element was not found
         void Remove(value_type item) {
 
-            for(int i = 0; i < size; ++i) {
+            for(unsigned long i = 0; i < size; ++i) {
 
                 if(array[i] == item) {
 
@@ -146,9 +146,9 @@ namespace practice {
 
         }
 
-        int Find(value_type item) {
+        unsigned long Find(value_type item) {
 
-            for(int i = 0; i < size; ++i) {
+            for(unsigned long i = 0; i < size; ++i) {
 
                 if(array[i] == item)
                     return i;
@@ -171,7 +171,7 @@ namespace practice {
         value_type* end() {return begin() + size;}
 
         // Overload subscript operators
-        value_type& operator[](int index) const {
+        value_type& operator[](unsigned long index) const {
 
             if(index < 0 || index >= size)
                 throw std::out_of_range("Array index out of bounds!");
@@ -197,7 +197,7 @@ namespace practice {
 
             array = new value_type[capacity];
             
-            for(int i = 0; i < size; ++i) 
+            for(unsigned long i = 0; i < size; ++i) 
                 array[i] = old_array[i];
             
 
@@ -205,12 +205,13 @@ namespace practice {
         }
 
         void Shrink() {
-
+            
+            // TODO: Check if capacity is less than kMinCapacity
             value_type* old_array = array;
             capacity = capacity / kShrinkFactor;
             array = new value_type[capacity];
 
-            for(int i = 0; i < size; ++i)
+            for(unsigned long i = 0; i < size; ++i)
                 array[i] = old_array[i];
             
             delete[] old_array;
