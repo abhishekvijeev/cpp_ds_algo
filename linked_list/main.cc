@@ -4,6 +4,6 @@
 
 int main() {
 
-    practice::LinkedList my_list;
+    practice::LinkedList<int> my_list;
     
 }

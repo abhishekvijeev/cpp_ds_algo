@@ -9,9 +9,12 @@ namespace practice {
      * a constructor and releasing them in a destructor
      */
 
+    template<typename T>
     class LinkedList {
 
     public:
+
+        using value_type = T;
 
         LinkedList() : head{nullptr}, tail{nullptr} {}
 
@@ -32,8 +35,6 @@ namespace practice {
             // traverse list and free every node
         }
 
-        void PushFront(int);
-
         /*
          * Simple operations must be inlined for efficiency (they are efficient because they are 
          * implemented without function calls in the generated machine code. Functions defined
@@ -44,7 +45,29 @@ namespace practice {
          * const specifiers on functions indicate that these functions do not modify the object
          * for which they are called
          */
-        int front() const {return head->data;};
+
+        // Operations
+        unsigned long Size() const;
+
+        bool IsEmpty() const;
+
+        value_type ValueAt(unsigned long index) const;
+
+        void PushFront(value_type item);
+
+        value_type PopFront();
+
+        void PushBack(value_type item);
+
+        value_type PopBack();
+
+        value_type Front() const;
+
+        value_type Back() const;
+
+        void Insert(unsigned long index, value_type item);
+        
+        value_type Erase(unsigned long index);
 
     private:
 
@@ -52,17 +75,16 @@ namespace practice {
         
             public:
 
-            ListNode() : data{0} {}
-            ListNode(int d) : data{d} {}
+            ListNode() {}
+            ListNode(value_type d) : data{d} {}
             ~ListNode() {}
 
-            int data;
+            value_type data;
         };
 
         ListNode *head;
         ListNode *tail;
         
-
     };
 }
 
