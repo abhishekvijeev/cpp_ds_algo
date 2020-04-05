@@ -70,36 +70,99 @@ namespace practice {
                 delete[] array;
         }
 
-        // Operations
+        // Vector Operations
 
-        /*
-         ***********************
-         * THROW EXCEPTIONS!!! 
-         ***********************
-         */
+        unsigned long Size() const { return size; }
 
-        unsigned long Size();
-        unsigned long Capacity();
-        bool IsEmpty();
-        value_type At(int index);   //throw out_of_range exception
+        unsigned long Capacity() const {return capacity; }
+
+        bool IsEmpty() const {return size == 0; }
+
+        value_type At (int index) const{
+
+            if(index < 0 || index >= size)
+                throw std::out_of_range("Array index out of bounds!");
+            
+            return array[index];
+
+        }  
 
         void Push(value_type item) {
+            
+            if(size == capacity)
+                Expand();
 
             array[size] = item;
             ++size;
         }
 
-        void Insert(value_type item, int index);
-        void Prepend(value_type item);
-        value_type Delete(int index);
-        value_type Pop();
-        void Remove(value_type item);
-        int Find(value_type item);
+        void Insert(value_type item, int index) {
+
+            if(index < 0 || index > size)
+                throw std::out_of_range("Array index out of bounds!");
+            
+            if(size == capacity)
+                Expand();
+
+            for(int i = size; i > index; --i)
+                array[i] = array[i - 1];
+
+            array[index] = item;
+            ++size;
+        }
+
+        void Prepend(value_type item) { Insert(item, 0); }
+
+        value_type Delete(int index) {
+
+            if(index < 0 || index >= size)
+                throw std::out_of_range("Array index out of bounds!");
+
+            int data = array[index];
+
+            for(int i = index; i < size; ++i) 
+                array[i] = array[i + 1];
+            
+            --size;
+            if(size * kShrinkFactor < capacity)
+                Shrink();
+            
+            return data;
+        }
+
+        value_type Pop() { return Delete(size - 1); }
+
+        // Could be improved to indicate that the element was not found
+        void Remove(value_type item) {
+
+            for(int i = 0; i < size; ++i) {
+
+                if(array[i] == item) {
+
+                    Delete(i);
+                    --i;
+                }
+            }
+
+        }
+
+        int Find(value_type item) {
+
+            for(int i = 0; i < size; ++i) {
+
+                if(array[i] == item)
+                    return i;
+            }
+
+            return -1;
+
+        }
 
         void Print() {
 
             for(unsigned long i = 0; i < size; ++i)
                 std::cout << array[i] << " ";
+
             std::cout << std::endl;
         }
 
@@ -108,11 +171,18 @@ namespace practice {
         value_type* end() {return begin() + size;}
 
         // Overload subscript operators
-        value_type& operator[](int i) const {return At(i);}
+        value_type& operator[](int index) const {
+
+            if(index < 0 || index >= size)
+                throw std::out_of_range("Array index out of bounds!");
+            
+            return array[index];
+
+        }
 
     private:    
 
-        value_type *array;
+        value_type* array;
         unsigned long capacity;
         unsigned long size;
 
@@ -120,8 +190,31 @@ namespace practice {
         static constexpr int kShrinkFactor = 4;
         static constexpr int kMinCapacity = 1;
 
-        void Expand();
-        void Shrink();
+        void Expand() {
+
+            capacity = capacity * kGrowthFactor;
+            value_type* old_array = array;
+
+            array = new value_type[capacity];
+            
+            for(int i = 0; i < size; ++i) 
+                array[i] = old_array[i];
+            
+
+            delete[] old_array;
+        }
+
+        void Shrink() {
+
+            value_type* old_array = array;
+            capacity = capacity / kShrinkFactor;
+            array = new value_type[capacity];
+
+            for(int i = 0; i < size; ++i)
+                array[i] = old_array[i];
+            
+            delete[] old_array;
+        }
 
     };
 
