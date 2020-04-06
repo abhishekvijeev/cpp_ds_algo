@@ -1,6 +1,8 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
+#include <memory>
+
 namespace practice {
 
     /*
@@ -82,8 +84,8 @@ namespace practice {
             value_type data;
         };
 
-        ListNode *head;
-        ListNode *tail;
+        std::unique_ptr<ListNode> head;
+        std::unique_ptr<ListNode> tail;
         
     };
 }
