@@ -19,7 +19,7 @@ namespace practice {
 
         using value_type = T;
 
-        LinkedList() : head{nullptr}, tail{nullptr} {}
+        LinkedList() : head{nullptr}, tail{nullptr}, size{0} {}
 
         /* 
          * Since we have explicitly specified a destructor, the move constructor and move
@@ -50,29 +50,37 @@ namespace practice {
          */
 
         // Operations
-        unsigned long Size() const {
+        unsigned long Size() const { return size; }
+
+        bool IsEmpty() const { return Size() == 0; }
+
+        value_type ValueAt(unsigned long index) const {
+            
+            if(index < 0 || index > Size())
+                throw std::out_of_range("List index out of bounds!");
 
             ListNode* current = head.get();
-            unsigned long size = 0;
+            unsigned long curr_index = 0;
+            value_type result;
 
             while(current != nullptr) {
+                
+                if(curr_index == index) {
 
-                ++size;
+                    result = current->data;
+                    break;
+                }
                 current = (current->next).get();
             }
 
-            return size;
+            return result;
         }
-
-        bool IsEmpty() const;
-
-        value_type ValueAt(unsigned long index) const;
 
         void PushFront(value_type item) {
 
             std::shared_ptr<ListNode> tmp = std::make_shared<ListNode>(item);
 
-            if(head == nullptr) {
+            if(IsEmpty()) {
                 
                 /*
                  * tmp is 'moved' to head rather than 'copied' because tmp is a stack variable,
@@ -93,21 +101,180 @@ namespace practice {
                 head = tmp;
             }
 
+            ++size;
         }
 
-        value_type PopFront();
+        value_type PopFront() {
 
-        void PushBack(value_type item);
+            if(IsEmpty())
+                throw std::underflow_error("List empty!");
 
-        value_type PopBack();
+            value_type data = head->data;
+            head = head->next;
+            --size;
+
+            if(IsEmpty()) {
+
+                head = nullptr;
+                tail = nullptr;
+            }
+            else
+                head->prev = nullptr;
+
+            return data;
+
+        }
+
+        void PushBack(value_type item) {
+            
+            std::shared_ptr<ListNode> tmp = std::make_shared<ListNode>(item);
+
+            if(IsEmpty()) {
+
+                tail = std::move(tmp);
+                head = tail;
+            }
+            else {
+
+                tail->next = tmp;
+                tmp->prev = tail;
+                tail = tmp;
+            }
+            
+            ++size;
+        }
+
+        value_type PopBack() {
+
+            if(IsEmpty())
+                throw std::underflow_error("List empty!");
+            
+            value_type data = tail->data;
+            tail = tail->prev;
+            --size;
+
+            if(IsEmpty()) {
+
+                head = nullptr;
+                tail = nullptr;
+            }
+            else
+                tail->next = nullptr;
+
+            return data;
+        }
 
         value_type Front() const { return head->data; }
 
         value_type Back() const { return tail->data; }
 
-        void Insert(unsigned long index, value_type item);
+        void Insert(unsigned long index, value_type item) {
+            
+            if(index == 0)
+                PushFront(item);
+
+            else if(index == Size())
+                PushBack(item);
+
+            else {
+                
+                std::shared_ptr<ListNode> tmp = std::make_shared<ListNode>(item);
+                std::shared_ptr<ListNode> current = head;
+                unsigned long curr_index = 0;
+
+                while(current != nullptr) {
+                    
+                    if(curr_index == index) {
+
+                        std::shared_ptr<ListNode> prev_node = current->prev;
+                        prev_node->next = tmp;
+                        tmp->prev = prev_node;
+                        tmp->next = current;
+                        current->prev = tmp;
+
+                        break;
+                    }
+
+                    ++curr_index;
+                    current = current->next;
+                }
+
+                ++size;
+            }
+
+        }
         
-        value_type Erase(unsigned long index);
+        value_type Erase(unsigned long index) {
+            
+            if(index < 0 || index >= Size())
+                throw std::out_of_range("List index out of bounds!");
+
+            if(index == 0)
+                return PopFront();
+            
+            else if(index == (Size() - 1))
+                return PopBack();
+            
+            else {
+
+                std::shared_ptr<ListNode> current = head;
+                unsigned long curr_index = 0;
+                value_type data;
+
+                while(current != nullptr) {
+
+                    if(curr_index == index) {
+
+                        std::shared_ptr<ListNode> prev_node = current->prev;
+                        std::shared_ptr<ListNode> next_node = current->next;
+                        data = current->data;
+
+                        prev_node->next = next_node;
+                        current->prev = nullptr;
+                        next_node->prev = prev_node;
+                        current->next = nullptr;
+
+                        break;
+                    }
+
+                    ++curr_index;
+                    current = current->next;
+                }
+
+
+                --size;
+                return data;
+            }
+            
+        }
+
+        void Traverse() const {
+            
+            ListNode* current = head.get();
+
+            std::cout << "List contents:" << std::endl;
+
+            while(current != nullptr) {
+
+                std::cout << current->data << std::endl;
+                current = (current->next).get();
+            }
+            std::cout << std::endl;
+        }
+
+        void TraverseReverse() const {
+            
+            ListNode* current = tail.get();
+
+            std::cout << "List contents in reverse:" << std::endl;
+
+            while(current != nullptr) {
+
+                std::cout << current->data << std::endl;
+                current = (current->prev).get();
+            }
+            std::cout << std::endl;
+        }
 
     private:
 
@@ -134,6 +301,7 @@ namespace practice {
         
         std::shared_ptr<ListNode> head;
         std::shared_ptr<ListNode> tail;
+        unsigned long size;
         
     };
 }
