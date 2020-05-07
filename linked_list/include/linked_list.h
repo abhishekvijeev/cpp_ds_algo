@@ -35,7 +35,14 @@ namespace practice {
 
         // Destructor
         ~LinkedList() { 
-            // traverse list and free every node
+            
+            std::shared_ptr<ListNode> tmp_head = std::move(head);
+            while(tmp_head != nullptr)
+                tmp_head = std::move(tmp_head->next);
+
+            std::shared_ptr<ListNode> tmp_tail = std::move(tail);
+            while(tmp_tail != nullptr)
+                tmp_tail = std::move(tmp_tail->prev);
         }
 
         /*

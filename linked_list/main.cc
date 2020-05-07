@@ -47,11 +47,11 @@ int main() {
     // cout << my_list.Front() << " " << my_list.Back() << endl;
 
     cout << "Erase(1): " << my_list.Erase(1) << std::endl;
-    cout << "Erase(1): " << my_list.Erase(1) << std::endl;
-    cout << "Erase(1): " << my_list.Erase(1) << std::endl;
-    cout << "Erase(1): " << my_list.Erase(1) << std::endl;
-    cout << "Erase(1): " << my_list.Erase(1) << std::endl;
-    cout << "Erase(0): " << my_list.Erase(0) << std::endl;
+    // cout << "Erase(1): " << my_list.Erase(1) << std::endl;
+    // cout << "Erase(1): " << my_list.Erase(1) << std::endl;
+    // cout << "Erase(1): " << my_list.Erase(1) << std::endl;
+    // cout << "Erase(1): " << my_list.Erase(1) << std::endl;
+    // cout << "Erase(0): " << my_list.Erase(0) << std::endl;
     cout << "Size: " << my_list.Size() << endl;
     my_list.Traverse();
     my_list.TraverseReverse();
