@@ -19,7 +19,7 @@ namespace practice {
         /*
          * Rule of Five: 
          * 
-         * "For a class that manages a resource, If you need to explicitly declare either the 
+         * "For a class that manages a resource, if you need to explicitly declare either the 
          * destructor, copy constructor, copy assignment operator, move constructor or move
          * assignment operator yourself, you probably need to explicitly declare all five of them."
          * 
@@ -43,7 +43,7 @@ namespace practice {
             size{0} {
         }
 
-        Vector(std::initializer_list<value_type> list) : 
+        Vector(const std::initializer_list<value_type>& list) : 
             array{new value_type[list.size()]},
             capacity{list.size()},
             size{list.size()} {
@@ -52,16 +52,42 @@ namespace practice {
             
         }
 
-        // TODO: Copy Constructor
-        Vector(const Vector&);
+        // Copy Constructor
+        Vector(const Vector& other) :
+            array{new value_type[other.Capacity()]},
+            capacity{other.Capacity()},
+            size{other.Size()} {
 
-        // TODO: Move Constructor
-        Vector(Vector&&); 
+                std::copy(other.begin(), other.end(), array);
 
-        // TODO: Assignment Operator
+        }
+
+        friend void swap(Vector& first, Vector& second) {
+
+            std::swap(first.capacity, second.capacity);
+            std::swap(first.size, second.size);
+            std::swap(first.array, second.array);
+        }
+
+        // Move Constructor
+        Vector(Vector&& other) :
+            array{other.array},
+            capacity{other.capacity},
+            size{other.size} {
+
+            other.size = 0;
+            other.capacity = 0;
+            other.array = nullptr;
+        }
+
+        // Assignment Operator
         // - If the argument passed is an lvalue, it is copy constructed
         // - If the argument is an rvalue, it is move constructed
-        Vector& operator = (Vector);
+        Vector& operator = (Vector other) {
+
+            swap(*this, other);
+            return *this;
+        }
 
         //Destructor
         ~Vector() {
@@ -167,8 +193,8 @@ namespace practice {
         }
 
         // To support a ranged for loop, we must define begin() and end() functions
-        value_type* begin() {return &array[0];}
-        value_type* end() {return begin() + size;}
+        value_type* begin() const { return &array[0]; }
+        value_type* end() const { return begin() + size; }
 
         // Overload subscript operators
         value_type& operator[](unsigned long index) const {
@@ -192,7 +218,7 @@ namespace practice {
 
         void Expand() {
 
-            capacity = capacity * kGrowthFactor;
+            capacity = (capacity == 0) ? 1 : (capacity * kGrowthFactor);
             value_type* old_array = array;
 
             array = new value_type[capacity];

@@ -51,5 +51,21 @@ int main() {
     v[1] = 200;
     v.Print();
     cout << "Size: " << v.Size() << ", capacity: " << v.Capacity() << endl;
+    cout << endl;
+
+    // Testing copy constructor
+    practice::Vector<int> v2;
+    cout << "Created new vector using the copy constructor" << endl;
+    v2 = v;
+    v2.Print();
+    cout << "Size: " << v2.Size() << ", capacity: " << v2.Capacity() << endl;
+    cout << endl;
+
+    // Testing move constructor
+    practice::Vector<int> v3;
+    v3 = static_cast<practice::Vector<int>&&>(practice::Vector<int> {1,2});
+    cout << "Created new vector using the move constructor" << endl;
+    v3.Print();
+    cout << "Size: " << v3.Size() << ", capacity: " << v3.Capacity() << endl;
     return 0;
 }
