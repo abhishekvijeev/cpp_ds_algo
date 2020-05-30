@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_subdirectory(vector)
 add_subdirectory(linked_list)
-add_subdirectory(heap)
+add_subdirectory(priority_queue)
 
 # add_executable(cpp_ds_algo main.cpp)
 # set(CPACK_PROJECT_NAME ${PROJECT_NAME})
